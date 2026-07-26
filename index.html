@@ -24,7 +24,7 @@
             color: #1e293b;
         }
 
-        /* ===== 顶部导航 — 精致毛玻璃 ===== */
+        /* ===== 顶部导航 ===== */
         .custom-header {
             background: rgba(11, 26, 51, 0.85);
             backdrop-filter: blur(16px);
@@ -106,27 +106,17 @@
             font-size: 10px;
         }
 
-        /* ===== 主内容区 ===== */
+        /* ===== 主内容区：iframe 撑满 ===== */
         .main-wrapper {
             flex: 1;
-            display: flex;
-            flex-direction: row;
+            position: relative;
             overflow: hidden;
-            background: #f0f4fb;
-            gap: 0;
         }
 
-        /* ===== iframe 容器 ===== */
         .iframe-container {
-            flex: 1;
-            position: relative;
+            width: 100%;
+            height: 100%;
             background: #ffffff;
-            margin: 12px 0 12px 12px;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0, 20, 40, 0.08);
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            min-height: 0; /* 防止 flex 溢出 */
         }
 
         .iframe-container iframe {
@@ -136,125 +126,88 @@
             display: block;
         }
 
-        /* ===== 反馈面板（右侧）— 磨砂玻璃 ===== */
-        .feedback-panel {
-            width: 260px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-left: 1px solid rgba(255, 255, 255, 0.5);
-            padding: 28px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            flex-shrink: 0;
-            overflow-y: auto;
-            margin: 12px 12px 12px 0;
-            border-radius: 24px;
-            box-shadow: 0 20px 60px rgba(0, 20, 40, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-        }
-
-        .feedback-panel .panel-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .feedback-panel .panel-header i {
-            font-size: 22px;
-            color: #f59e0b;
-            background: rgba(245, 158, 11, 0.12);
-            padding: 8px;
-            border-radius: 12px;
-        }
-
-        .feedback-panel .panel-header h4 {
-            font-size: 16px;
-            font-weight: 600;
-            color: #0b1a33;
-            margin: 0;
-        }
-
-        .feedback-panel .panel-desc {
-            font-size: 13px;
-            color: #64748b;
-            line-height: 1.5;
-            margin-top: -4px;
-            padding-left: 4px;
-        }
-
-        .feedback-btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 4px;
-        }
-
-        .feedback-btn {
-            padding: 12px 0;
-            border: none;
-            border-radius: 16px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+        /* ===== 底部状态栏 ===== */
+        .custom-footer {
             background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-        }
-
-        .feedback-btn.solved {
-            color: #059669;
-            background: rgba(52, 211, 153, 0.12);
-            border-color: rgba(52, 211, 153, 0.25);
-        }
-
-        .feedback-btn.solved:hover {
-            background: rgba(52, 211, 153, 0.22);
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 8px 24px rgba(52, 211, 153, 0.20);
-        }
-
-        .feedback-btn.unsolved {
-            color: #dc2626;
-            background: rgba(239, 68, 68, 0.08);
-            border-color: rgba(239, 68, 68, 0.15);
-        }
-
-        .feedback-btn.unsolved:hover {
-            background: rgba(239, 68, 68, 0.18);
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.15);
-        }
-
-        .feedback-btn i {
-            font-size: 18px;
-        }
-
-        .feedback-note {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 8px 28px;
+            display: flex;
+            justify-content: space-between;
             font-size: 12px;
             color: #94a3b8;
-            text-align: center;
-            padding-top: 6px;
-            border-top: 1px dashed rgba(148, 163, 184, 0.2);
+            border-top: 1px solid rgba(255, 255, 255, 0.4);
+            flex-shrink: 0;
+        }
+
+        .custom-footer .footer-left i {
+            color: #34d399;
+            margin-right: 6px;
+            font-size: 8px;
+        }
+
+        .custom-footer .footer-right i {
+            color: #f59e0b;
+            margin-right: 6px;
+        }
+
+        /* ===== 桌面端反馈面板（右侧） ===== */
+        .feedback-panel-desktop {
+            display: none; /* 默认隐藏，由媒体查询控制显示 */
+        }
+
+        /* ===== 手机端悬浮反馈按钮 ===== */
+        .feedback-float {
+            position: fixed;
+            bottom: 80px;
+            right: 16px;
             display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 100;
+        }
+
+        .feedback-float .float-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: none;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 2px;
+            transition: all 0.2s ease;
+            color: #fff;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
 
-        .feedback-note i {
-            color: #f59e0b;
+        .feedback-float .float-btn i {
+            font-size: 20px;
         }
 
-        /* ===== 模态框 — 更精致 ===== */
+        .feedback-float .float-btn.solved {
+            background: rgba(5, 150, 105, 0.9);
+        }
+
+        .feedback-float .float-btn.solved:active {
+            transform: scale(0.92);
+        }
+
+        .feedback-float .float-btn.unsolved {
+            background: rgba(220, 38, 38, 0.9);
+        }
+
+        .feedback-float .float-btn.unsolved:active {
+            transform: scale(0.92);
+        }
+
+        /* ===== 模态框 ===== */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -416,35 +369,10 @@
             background: rgba(255, 255, 255, 0.8);
         }
 
-        /* ===== 底部状态栏 ===== */
-        .custom-footer {
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 8px 28px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: #94a3b8;
-            border-top: 1px solid rgba(255, 255, 255, 0.4);
-            flex-shrink: 0;
-        }
-
-        .custom-footer .footer-left i {
-            color: #34d399;
-            margin-right: 6px;
-            font-size: 8px;
-        }
-
-        .custom-footer .footer-right i {
-            color: #f59e0b;
-            margin-right: 6px;
-        }
-
         /* ===== Toast 通知 ===== */
         .toast {
             position: fixed;
-            bottom: 100px;
+            bottom: 150px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(15, 23, 42, 0.85);
@@ -479,109 +407,195 @@
             background: rgba(220, 38, 38, 0.92);
         }
 
-        /* ===== 响应式设计：手机端精简反馈面板 ===== */
-        @media (max-width: 820px) {
+        /* ===== 桌面端显示右侧面板（>=820px） ===== */
+        @media (min-width: 820px) {
             .main-wrapper {
-                flex-direction: column;
+                display: flex;
+                flex-direction: row;
+                background: #f0f4fb;
                 gap: 0;
             }
 
             .iframe-container {
-                margin: 10px 10px 0 10px;
-                border-radius: 20px;
                 flex: 1;
-                min-height: 0;
-            }
-
-            .feedback-panel {
-                width: auto;
-                flex-direction: row;
-                flex-wrap: nowrap;
-                align-items: center;
-                justify-content: space-between;
-                margin: 6px 10px 10px 10px;
-                padding: 6px 12px;
-                border-radius: 16px;
-                gap: 6px;
-                border-left: none;
-                border-top: 1px solid rgba(255, 255, 255, 0.3);
-                max-height: 50px;
+                margin: 12px 0 12px 12px;
+                border-radius: 24px;
+                box-shadow: 0 20px 60px rgba(0, 20, 40, 0.08);
+                border: 1px solid rgba(255, 255, 255, 0.3);
                 overflow: hidden;
+                height: auto;
+            }
+
+            .feedback-panel-desktop {
+                display: flex;
+                flex-direction: column;
+                width: 260px;
+                background: rgba(255, 255, 255, 0.7);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border-left: 1px solid rgba(255, 255, 255, 0.5);
+                padding: 28px 20px;
+                gap: 18px;
                 flex-shrink: 0;
+                overflow-y: auto;
+                margin: 12px 12px 12px 0;
+                border-radius: 24px;
+                box-shadow: 0 20px 60px rgba(0, 20, 40, 0.06);
+                border: 1px solid rgba(255, 255, 255, 0.5);
             }
 
-            .feedback-panel .panel-header {
-                flex: 0 0 auto;
-                gap: 4px;
+            .feedback-panel-desktop .panel-header {
+                display: flex;
+                align-items: center;
+                gap: 10px;
             }
 
-            .feedback-panel .panel-header i {
-                font-size: 14px;
-                padding: 4px;
-                border-radius: 8px;
+            .feedback-panel-desktop .panel-header i {
+                font-size: 22px;
+                color: #f59e0b;
+                background: rgba(245, 158, 11, 0.12);
+                padding: 8px;
+                border-radius: 12px;
             }
 
-            .feedback-panel .panel-header h4 {
-                font-size: 12px;
+            .feedback-panel-desktop .panel-header h4 {
+                font-size: 16px;
+                font-weight: 600;
+                color: #0b1a33;
                 margin: 0;
             }
 
-            .feedback-panel .panel-desc {
-                display: none;
+            .feedback-panel-desktop .panel-desc {
+                font-size: 13px;
+                color: #64748b;
+                line-height: 1.5;
+                margin-top: -4px;
+                padding-left: 4px;
             }
 
-            .feedback-btn-group {
-                flex-direction: row;
-                margin-top: 0;
-                gap: 4px;
+            .feedback-panel-desktop .feedback-btn-group {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 4px;
             }
 
-            .feedback-btn {
-                padding: 4px 12px;
-                font-size: 11px;
-                border-radius: 20px;
-                gap: 4px;
-                min-width: 60px;
+            .feedback-panel-desktop .feedback-btn {
+                padding: 12px 0;
+                border: none;
+                border-radius: 16px;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+                background: rgba(255, 255, 255, 0.6);
+                backdrop-filter: blur(4px);
+                -webkit-backdrop-filter: blur(4px);
+                border: 1px solid rgba(255, 255, 255, 0.4);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
             }
 
-            .feedback-btn i {
+            .feedback-panel-desktop .feedback-btn.solved {
+                color: #059669;
+                background: rgba(52, 211, 153, 0.12);
+                border-color: rgba(52, 211, 153, 0.25);
+            }
+
+            .feedback-panel-desktop .feedback-btn.solved:hover {
+                background: rgba(52, 211, 153, 0.22);
+                transform: translateY(-2px) scale(1.02);
+                box-shadow: 0 8px 24px rgba(52, 211, 153, 0.20);
+            }
+
+            .feedback-panel-desktop .feedback-btn.unsolved {
+                color: #dc2626;
+                background: rgba(239, 68, 68, 0.08);
+                border-color: rgba(239, 68, 68, 0.15);
+            }
+
+            .feedback-panel-desktop .feedback-btn.unsolved:hover {
+                background: rgba(239, 68, 68, 0.18);
+                transform: translateY(-2px) scale(1.02);
+                box-shadow: 0 8px 24px rgba(239, 68, 68, 0.15);
+            }
+
+            .feedback-panel-desktop .feedback-btn i {
+                font-size: 18px;
+            }
+
+            .feedback-panel-desktop .feedback-note {
                 font-size: 12px;
+                color: #94a3b8;
+                text-align: center;
+                padding-top: 6px;
+                border-top: 1px dashed rgba(148, 163, 184, 0.2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
             }
 
-            .feedback-note {
+            .feedback-panel-desktop .feedback-note i {
+                color: #f59e0b;
+            }
+
+            .feedback-float {
                 display: none;
             }
         }
 
-        @media (max-width: 480px) {
+        /* ===== 手机端（<820px）隐藏桌面面板，显示悬浮按钮 ===== */
+        @media (max-width: 819px) {
+            .feedback-panel-desktop {
+                display: none !important;
+            }
+
+            .feedback-float {
+                display: flex;
+            }
+
             .custom-header {
-                padding: 8px 16px;
+                padding: 10px 16px;
                 min-height: 56px;
             }
+
             .header-logo {
                 width: 34px;
                 height: 34px;
                 font-size: 16px;
             }
+
             .header-title {
                 font-size: 16px;
             }
+
             .header-sub {
                 font-size: 10px;
             }
+
             .header-badge {
                 font-size: 10px;
                 padding: 4px 12px;
             }
-            .feedback-panel {
-                padding: 4px 10px;
-                max-height: 44px;
-                margin: 4px 10px 10px 10px;
-            }
-            .feedback-btn {
-                padding: 3px 10px;
+
+            .custom-footer {
                 font-size: 10px;
-                min-width: 50px;
+                padding: 4px 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .feedback-float .float-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 10px;
+            }
+            .feedback-float .float-btn i {
+                font-size: 16px;
             }
             .modal-box {
                 padding: 24px 18px;
@@ -609,9 +623,8 @@
         </div>
     </header>
 
-    <!-- ===== 主内容区 ===== -->
+    <!-- ===== 主内容区：iframe ===== -->
     <div class="main-wrapper">
-        <!-- iframe 区域：嵌入 DEAP 智能体 -->
         <div class="iframe-container">
             <iframe
                 id="deapIframe"
@@ -621,18 +634,18 @@
             ></iframe>
         </div>
 
-        <!-- 反馈面板 -->
-        <div class="feedback-panel">
+        <!-- ===== 桌面端反馈面板 ===== -->
+        <div class="feedback-panel-desktop" id="desktopPanel">
             <div class="panel-header">
                 <i class="fas fa-comment-dots"></i>
                 <h4>问题反馈</h4>
             </div>
             <div class="panel-desc">该回答是否解决了您的问题？</div>
             <div class="feedback-btn-group">
-                <button class="feedback-btn solved" id="solvedBtn">
+                <button class="feedback-btn solved" id="solvedBtnDesktop">
                     <i class="fas fa-check-circle"></i> 已解决
                 </button>
-                <button class="feedback-btn unsolved" id="unsolvedBtn">
+                <button class="feedback-btn unsolved" id="unsolvedBtnDesktop">
                     <i class="fas fa-times-circle"></i> 未解决
                 </button>
             </div>
@@ -640,6 +653,18 @@
                 <i class="fas fa-info-circle"></i> 未解决将通知管理员
             </div>
         </div>
+    </div>
+
+    <!-- ===== 手机端悬浮反馈按钮 ===== -->
+    <div class="feedback-float" id="floatPanel">
+        <button class="float-btn solved" id="solvedBtnFloat">
+            <i class="fas fa-check-circle"></i>
+            <span>已解决</span>
+        </button>
+        <button class="float-btn unsolved" id="unsolvedBtnFloat">
+            <i class="fas fa-times-circle"></i>
+            <span>未解决</span>
+        </button>
     </div>
 
     <!-- ===== 底部状态栏 ===== -->
@@ -686,14 +711,11 @@
         (function() {
             'use strict';
 
-            // ============================================================
-            //  🔧 阿里云函数计算后端地址（已配置好，请勿修改）
-            // ============================================================
             const API_BACKEND = 'https://feedbacroxy-web-sigigkprpt.cn-hangzhou.fcapp.run';
 
-            // DOM 元素
-            const solvedBtn = document.getElementById('solvedBtn');
-            const unsolvedBtn = document.getElementById('unsolvedBtn');
+            // 按钮元素（桌面和浮动共用逻辑）
+            const solvedBtns = document.querySelectorAll('#solvedBtnDesktop, #solvedBtnFloat');
+            const unsolvedBtns = document.querySelectorAll('#unsolvedBtnDesktop, #unsolvedBtnFloat');
             const modal = document.getElementById('feedbackModal');
             const cancelBtn = document.getElementById('modalCancel');
             const submitBtn = document.getElementById('modalSubmit');
@@ -701,29 +723,24 @@
             const userContact = document.getElementById('userContact');
             const issueDesc = document.getElementById('issueDesc');
 
-            // ===== Toast 通知 =====
+            // Toast
             function showToast(message, type) {
                 const existing = document.querySelector('.toast');
                 if (existing) existing.remove();
-
                 const toast = document.createElement('div');
                 toast.className = 'toast';
                 if (type === 'success') toast.classList.add('success');
                 if (type === 'error') toast.classList.add('error');
                 toast.textContent = message;
                 document.body.appendChild(toast);
-
-                requestAnimationFrame(() => {
-                    toast.classList.add('show');
-                });
-
+                requestAnimationFrame(() => toast.classList.add('show'));
                 setTimeout(() => {
                     toast.classList.remove('show');
                     setTimeout(() => toast.remove(), 500);
                 }, 3000);
             }
 
-            // ===== 发送钉钉消息（通过阿里云函数计算后端） =====
+            // 发送反馈
             async function sendDingTalkMessage(user, contact, desc) {
                 try {
                     const response = await fetch(API_BACKEND, {
@@ -731,91 +748,63 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ user, contact, desc })
                     });
-
                     const result = await response.json();
-
                     if (result.success) {
                         showToast('✅ 反馈已发送，管理员将很快联系您', 'success');
                     } else {
                         showToast('❌ 提交失败：' + (result.error || '未知错误'), 'error');
                     }
                 } catch (e) {
-                    console.error('请求后端失败', e);
                     showToast('❌ 网络异常，请稍后重试', 'error');
                 }
             }
 
-            // ===== 事件绑定 =====
-
-            // 已解决按钮
-            solvedBtn.addEventListener('click', function() {
-                showToast('✅ 已解决，感谢您的反馈！', 'success');
+            // 绑定“已解决”按钮
+            solvedBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    showToast('✅ 已解决，感谢您的反馈！', 'success');
+                });
             });
 
-            // 未解决按钮 → 打开弹窗
-            unsolvedBtn.addEventListener('click', function() {
-                userName.value = '';
-                userContact.value = '';
-                issueDesc.value = '';
-                modal.classList.add('active');
+            // 绑定“未解决”按钮
+            unsolvedBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    userName.value = '';
+                    userContact.value = '';
+                    issueDesc.value = '';
+                    modal.classList.add('active');
+                });
             });
 
             // 关闭弹窗
             function closeModal() {
                 modal.classList.remove('active');
             }
-
             cancelBtn.addEventListener('click', closeModal);
-
-            // 点击蒙层关闭
             modal.addEventListener('click', function(e) {
                 if (e.target === modal) closeModal();
             });
 
-            // 提交反馈
+            // 提交
             submitBtn.addEventListener('click', async function() {
                 const name = userName.value.trim();
                 const contact = userContact.value.trim();
                 const desc = issueDesc.value.trim();
-
-                // 校验必填项
-                if (!name) {
-                    showToast('请填写您的姓名', 'error');
-                    userName.focus();
-                    return;
-                }
-                if (!contact) {
-                    showToast('请填写您的钉钉号', 'error');
-                    userContact.focus();
-                    return;
-                }
-                if (!desc) {
-                    showToast('请描述您刚才问了什么问题', 'error');
-                    issueDesc.focus();
-                    return;
-                }
-
-                // 禁用按钮，防止重复提交
+                if (!name) { showToast('请填写您的姓名', 'error'); userName.focus(); return; }
+                if (!contact) { showToast('请填写您的钉钉号', 'error'); userContact.focus(); return; }
+                if (!desc) { showToast('请描述您刚才问了什么问题', 'error'); issueDesc.focus(); return; }
                 submitBtn.disabled = true;
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 发送中...';
-
                 await sendDingTalkMessage(name, contact, desc);
-
-                // 恢复按钮状态
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> 提交反馈';
-
-                // 关闭弹窗
                 closeModal();
             });
 
-            // ===== iframe 加载完成日志 =====
             document.getElementById('deapIframe').addEventListener('load', function() {
                 console.log('✅ DEAP 智能体已加载');
             });
-
         })();
     </script>
-
 </body>
 </html>
