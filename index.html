@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>钉钉Webhook快捷发送器</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, Microsoft YaHei;
+        }
+        body {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+            background: #f5f7fa;
+        }
+        .card {
+            background: #fff;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #222;
+        }
+        .row {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #333;
+        }
+        input, textarea {
+            width: 100%;
+            border: 1px solid #dcdfe6;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 14px;
+        }
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+        .btn-box {
+            display: flex;
+            gap:12px;
+            margin-top:10px;
+        }
+        button {
+            padding: 10px 22px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        #sendBtn {
+            background: #2584ff;
+            color: white;
+        }
+        #clearBtn {
+            background: #eee;
+            color: #333;
+        }
+        .tip {
+            margin-top:12px;
+            font-size:13px;
+            color:#888;
+        }
+        #result {
+            margin-top:15px;
+            padding:10px;
+            border-radius:6px;
+            white-space: pre-wrap;
+        }
+        .success {
+            background:#e6f7ff;
+            color:#0066cc;
+        }
+        .error {
+            background:#fff2f0;
+            color:#f5222d;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>钉钉机器人消息发送（免登录）</h2>
+
+        <div class="row">
+            <label>Webhook地址</label>
+            <input id="webhook" placeholder="https://oapi.dingtalk.com/robot/send?access_token=xxxx">
+        </div>
+
+        <div class="row">
+            <label>加签密钥 SEC（不用加签留空）</label>
+            <input id="secret" placeholder="SECxxxx，只用关键词则不用填">
+        </div>
+
+        <div class="row">
+            <label>发送内容（关键词模式必须包含设定关键词）</label>
+            <textarea id="msg"></textarea>
+        </div>
+
+        <div class="row">
+            <label>
+                <input type="checkbox" id="atAll"> @所有人
+            </label>
+        </div>
+
+        <div class="btn-box">
+            <button id="sendBtn">一键发送钉钉</button>
+            <button id="clearBtn">清空内容</button>
+        </div>
+
+        <div id="result"></div>
+        <div class="tip">
+            部署GitHub Pages公网访问无跨域，所有浏览器原生支持，无需任何插件；请勿泄露Webhook和SEC。
+        </div>
+    </div>
+
+<script>
+    const webhookInp = document.getElementById('webhook');
+    const secretInp = document.getElementById('secret');
+    const msgInp = document.getElementById('msg');
+    const atAllCheck = document.getElementById('atAll');
+    const sendBtn = document.getElementById('sendBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const resultDom = document.getElementById('result');
+
+    // 加签计算
+    function calcSign(secret) {
+        if (!secret) return Promise.resolve({t:"",s:""});
+        const timestamp = new Date().getTime().toString();
+        const encoder = new TextEncoder();
+        const data = encoder.encode(`${timestamp}\n${secret}`);
+        const key = encoder.encode(secret);
+
+        return crypto.subtle.importKey('raw', key, {name:'HMAC',hash:'SHA-256'}, false, ['sign'])
+        .then(key => crypto.subtle.sign('HMAC', key, data))
+        .then(buf => {
+            let binary = '';
+            const bytes = new Uint8Array(buf);
+            for (let i=0; i<bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+            const base64 = btoa(binary);
+            const sign = encodeURIComponent(base64);
+            return {t:timestamp, s:sign};
+        })
+    }
+
+    // 发送主逻辑
+    async function sendDing() {
+        resultDom.className = '';
+        const webhook = webhookInp.value.trim();
+        const secret = secretInp.value.trim();
+        const content = msgInp.value.trim();
+        const atAll = atAllCheck.checked;
+
+        if(!webhook) {
+            resultDom.textContent = '错误：请填写完整Webhook地址';
+            resultDom.className = 'error';
+            return;
+        }
+        if(!content) {
+            resultDom.textContent = '错误：消息不能为空';
+            resultDom.className = 'error';
+            return;
+        }
+
+        let finalUrl = webhook;
+        if(secret){
+            const {t,s} = await calcSign(secret);
+            finalUrl += `&timestamp=${t}&sign=${s}`;
+        }
+
+        const payload = {
+            msgtype:"text",
+            text:{content},
+            at:{isAtAll: atAll}
+        };
+
+        try {
+            const res = await fetch(finalUrl, {
+                method:"POST",
+                headers:{"Content-Type":"application/json"},
+                body: JSON.stringify(payload)
+            })
+            const json = await res.json();
+            if(json.errcode === 0){
+                resultDom.textContent = `发送成功\n返回：${JSON.stringify(json,null,2)}`;
+                resultDom.className = 'success';
+            } else {
+                resultDom.textContent = `发送失败\n${JSON.stringify(json,null,2)}`;
+                resultDom.className = 'error';
+            }
+        } catch (err) {
+            resultDom.textContent = `网络请求失败：${err.message}`;
+            resultDom.className = 'error';
+        }
+    }
+
+    sendBtn.onclick = sendDing;
+    clearBtn.onclick = ()=>{
+        msgInp.value = '';
+        resultDom.textContent = '';
+        resultDom.className = '';
+    }
+</script>
+</body>
+</html>
